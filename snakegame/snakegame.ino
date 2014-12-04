@@ -1,11 +1,9 @@
 #include <MeggyJrSimple.h>
 
-int xplayer=3;  //corrdinates of player dot
-int yplayer=4;
-int dir=0;  // possible values are 0, 90, 180, 270
+int dir=270;  // possible values are 0, 90, 180, 270
 int xapple=random(8); // apple variables
 int yapple=random(8);
-struct Point
+struct Point  // player dot coordinates
 {
   int x;
   int y;
@@ -13,9 +11,10 @@ struct Point
 Point p1 = {3,4};
 Point p2 = {4,4};
 Point p3 = {5,4};
-Point snakeArray{64}= {p1, p2, p3};
+Point p4 = {6,4};
+Point snakeArray[64]= {p1, p2, p3, p4};
 
-int marker=3;
+int marker=4;
 void setup()
 {
   MeggyJrSimpleSetup();
@@ -26,32 +25,56 @@ void drawSnake()
 {
   for (int i=0; i<marker; i++)
   {
-   DrawPx(snakeArray{i}.x, snakeArray{i}.y, Red)
+   DrawPx(snakeArray[i].x, snakeArray[i].y, Green);
+  }
+}
+
+void updateSnake()
+{
+  for (int i=marker-1; i>0; i--)
+  {
+    snakeArray[i]=snakeArray[i-1];
   }
 }
 
 void loop()  // runs over and over
               /*
-              Draw plaer
+              Draw snake
+              Draw head
               DisplaySlate();
-              Chck Buttons
+              delay();
+              ClearSlate
+              update the snake
+              Check Buttons
               update direction if butoon is pressed
-              update player based on direction
+              update head based on direction
               correct for wrapping
+              check to see if apple eaten
+                if ture, spawn new apple
+                increas marker by ONE
               
               */
 {
   Serial.print("x is ");
-  Serial.println(xplayer);
+  Serial.println(snakeArray[0].x);
   Serial.print("y is ");
-  Serial.println(yplayer);
+  Serial.println(snakeArray[0].y);
   Serial.println();
-  DrawPx (xplayer,yplayer,Green);
-  //DrawPx (xapple,yapple,Red);
+  drawSnake();
   DisplaySlate();
-  delay(100);
+  delay(250);
+  ClearSlate();
+  
+  updateSnake();
    
   CheckButtonsPress();
+  
+  // code to expand snake from button
+  /*if (Button_A)
+  {
+    marker++;
+  }*/
+    
   
   if (Button_Up)  // changing directions
   {
@@ -72,42 +95,45 @@ void loop()  // runs over and over
   
   if (dir==0)  // contiued directions
   {
-    yplayer++;
+    snakeArray[0].y++;
   }
   if (dir==90)
   {
-    xplayer++;
+    snakeArray[0].x++;
   }
   if (dir==180)
   {
-    yplayer--;
+    snakeArray[0].y--;
   }
   if (dir==270)
   {
-    xplayer--;
+    snakeArray[0].x--;
   }
   
-  if (xplayer>7)  // wrap arounds
+  if (snakeArray[0].x>7)  // wrap arounds
   {
-    xplayer=0;
+    snakeArray[0].x=0;
   }
-  if (yplayer>7)
+  if (snakeArray[0].y>7)
   {
-    yplayer=0;
+    snakeArray[0].y=0;
   }
-  if (xplayer<0)
+  if (snakeArray[0].x<0)
   {
-    xplayer=7;
+    snakeArray[0].x=7;
   }
-  if (yplayer<0)
+  if (snakeArray[0].y<0)
   {
-    yplayer=7;
+    snakeArray[0].y=7;
   }
   
   // apple code
-  if (xapple==xplayer)
+
+DrawPx (xapple,yapple,Red);
+  
+  if (xapple==snakeArray[0].x)
   {
-    if (yapple==yplayer)
+    if (yapple==snakeArray[0].y)
     {
       xapple=random(8);
       yapple=random(8);
