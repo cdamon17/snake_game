@@ -11,10 +11,9 @@ struct Point  // player dot coordinates
 Point p1 = {3,4};
 Point p2 = {4,4};
 Point p3 = {5,4};
-Point p4 = {6,4};
-Point snakeArray[64]= {p1, p2, p3, p4};
+Point snakeArray[64]= {p1, p2, p3};
 
-int marker=4;
+int marker=3;
 void setup()
 {
   MeggyJrSimpleSetup();
@@ -55,6 +54,8 @@ void loop()  // runs over and over
               
               */
 {
+  updateSnake();  // use to keep a green dot from appearing at bottom left
+                  // corner when apple eaten
   Serial.print("x is ");
   Serial.println(snakeArray[0].x);
   Serial.print("y is ");
@@ -65,7 +66,7 @@ void loop()  // runs over and over
   delay(250);
   ClearSlate();
   
-  updateSnake();
+  //updateSnake();
    
   CheckButtonsPress();
   
@@ -131,12 +132,23 @@ void loop()  // runs over and over
 
 DrawPx (xapple,yapple,Red);
   
-  if (xapple==snakeArray[0].x)
-  {
-    if (yapple==snakeArray[0].y)
-    {
-      xapple=random(8);
-      yapple=random(8);
+ if (xapple==snakeArray[0].x)
+ {
+   if (yapple==snakeArray[0].y)
+   {
+     Tone_Start(ToneC6, 100);
+     delay(200);
+     xapple=random(8);
+     yapple=random(8);
+     marker++;
+   }
+ }
+ 
+ /*if (xapple==snakeArray[0].x)
+ {
+   if (yapple==snakeArray[0].y)
+   {
+      marker++;
     }
-  }
+ }*/
 }
