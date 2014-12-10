@@ -13,7 +13,7 @@ Point p2 = {4,4};
 Point p3 = {5,4};
 Point snakeArray[64]= {p1, p2, p3};
 
-int marker=3;
+int marker=4;  // not sure why a 4 is needed to show all dots
 void setup()
 {
   MeggyJrSimpleSetup();
@@ -35,6 +35,7 @@ void updateSnake()
     snakeArray[i]=snakeArray[i-1];
   }
 }
+
 
 void loop()  // runs over and over
               /*
